@@ -8,6 +8,11 @@ Spree::Variant.class_eval do
   end
   alias :create_sale :put_on_sale
 
+  def put_on_sale_with_currency(value, currency, calculator_type = "Spree::Calculator::DollarAmountSalePriceCalculator", start_at = Time.now, end_at = nil, enabled = true)
+    price = prices.find { |p| p.currency == currency }
+    price.put_on_sale(value, calculator_type, start_at, end_at, enabled) if price
+  end
+
   # TODO make update_sale method
 
   def active_sale_in(currency)
@@ -53,7 +58,7 @@ Spree::Variant.class_eval do
   end
   
   private
-   
+
   def run_on_prices(all_currencies, &block)
     if all_currencies && prices.present?
       prices.each { |p| block.call p }
