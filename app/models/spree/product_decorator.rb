@@ -15,6 +15,10 @@ Spree::Product.class_eval do
   end
   alias :create_sale :put_on_sale
 
+  def put_master_variant_on_sale(value, calculator_type = "Spree::Calculator::DollarAmountSalePriceCalculator", start_at = Time.now, end_at = nil, enabled = true)
+    master.put_on_sale(value, calculator_type, true, start_at, end_at, enabled)
+  end
+
   def enable_sale(all_variants = true)
     run_on_variants(all_variants) { |v| v.enable_sale }
   end
